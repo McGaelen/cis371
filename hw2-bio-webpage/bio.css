@@ -1,0 +1,29 @@
+body {
+    height: 100%;
+    padding: 10px;
+    font-family: Georgia;
+    background-color: #323875;
+}
+
+h1 {
+    color: #cdcfeb;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+div {
+    color: #6d73a9;
+    font-size: 16pt;
+    text-align: center;
+}
+
+.profile-picture {
+    padding-bottom: 10px;
+    float: right;
+    size: 612px;
+    border: transparent;
+    border-width: 4px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px;
+    /*border-color: #1497df;*/
+}
