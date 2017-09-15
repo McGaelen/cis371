@@ -37,6 +37,14 @@ p.picture-text {
     height:306px;
     margin-right: 50px;
     margin-left: 50px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.obama {
+    width: 100px;
+    height: 100px;
+    /*text-align: center;*/
 }
 
 #mainTable {
@@ -48,18 +56,19 @@ p.picture-text {
     border: inset;
     border-color: #2780c2;
     border-width: 4px;
+    width: 100%;
 }
 
 .top-left {
-    color: #2780c2;
+    /*color: #2780c2;*/
 }
 
 .top-right {
-    font-style: italic;
+    /*font-style: italic;*/
 }
 
 .middle-left {
-
+    list-style-type: lower-alpha;
 }
 
 .middle-right {
@@ -73,4 +82,8 @@ p.picture-text {
 
 .bottom-right {
 
+}
+
+.best {
+    font-style: italic;
 }
