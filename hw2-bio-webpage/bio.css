@@ -1,7 +1,7 @@
 body {
     height: 100%;
     padding: 10px;
-    font-family: Lato;
+    font-family: Times;
     font-size: 16pt;
     background-color: #ececec;
 }
@@ -60,11 +60,12 @@ p.picture-text {
 }
 
 .top-left {
-    /*color: #2780c2;*/
+    color: #2780c2;
 }
 
 .top-right {
-    /*font-style: italic;*/
+    color: #2780c2;
+    font-style: italic;
 }
 
 .middle-left {
@@ -77,11 +78,11 @@ p.picture-text {
 
 /* bottom-left */
 .links {
-
+    color: #2780c2;
 }
 
 .bottom-right {
-
+    color: #2780c2;
 }
 
 .best {
