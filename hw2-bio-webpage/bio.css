@@ -22,6 +22,10 @@ p.picture-text {
     /*height: 321px;*/
 }
 
+td p {
+    font-size: small;
+}
+
 .picture {
     border: transparent;
     border-width: 4px;
@@ -57,6 +61,14 @@ p.picture-text {
     border-color: #2780c2;
     border-width: 4px;
     width: 100%;
+}
+
+#courseTable tr:nth-child(even) {
+    background-color: #d1d1d1;
+}
+
+#courseTable tr td:nth-child(1), td:nth-child(3) {
+    text-align: center;
 }
 
 .top-left {
