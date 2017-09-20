@@ -1,6 +1,6 @@
 /**
  * Created by Hans Dulimarta Fall 2017.
- * TODO: Add your name below this line
+ * Gaelen McIntee
  */
 
 /**
@@ -12,10 +12,15 @@
  * @param rootId
  * @returns {number}
  */
-function findElementsWithId(rootId, klazName) {
-    /* complete this function */
-    return 0;
+function findElementsWithId(rootId, klazname) {
+    let counter = 0;
+    document.querySelectorAll(`#${rootId} > [id]`).forEach( elem => {
+        counter++;
+        elem.className += klazname;
+    });
+    return counter;
 }
+
 
 /**
  * The following function finds all elements with attribute 'data-gv-row' (or
