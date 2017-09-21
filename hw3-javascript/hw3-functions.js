@@ -30,5 +30,28 @@ function findElementsWithId(rootId, klazname) {
  * @returns NONE
  */
 function createTable() {
-    /* complete this function */
+    let tableDiv = document.querySelector('.table-home');
+    let rows = Number(tableDiv.getAttribute('data-gv-row'));
+    let cols = Number(tableDiv.getAttribute('data-gv-column'));
+
+    const lipsum = new LoremIpsum();
+
+    tableDiv.innerHTML = '<table id="table"></table>';
+    let table = document.getElementById('table');
+
+    for (let i = 0; i < rows+1; i++) {
+        let newRow = document.createElement('tr');
+        table.appendChild(newRow);
+        for (let j = 0; j < cols; j++) {
+            if (i === 0) {
+                let newHeading = document.createElement('th');
+                newHeading.appendChild(document.createTextNode(`Heading ${j+1}`));
+                newRow.appendChild(newHeading);
+            } else {
+                let newCol = document.createElement('td');
+                newCol.appendChild(document.createTextNode(lipsum.generate(3)));
+                newRow.appendChild(newCol);
+            }
+        }
+    }
 }
