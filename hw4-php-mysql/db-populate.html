@@ -5,7 +5,7 @@
     <title>Upload a csv file</title>
 </head>
 <body>
-    <form action="db-populate.php" method="GET">
+    <form enctype="multipart/form-data" action="db-populate.php" method="POST">
         CSV File: <input type="file" name="csvFile" />
         <input type="submit" value="Upload" />
     </form>
