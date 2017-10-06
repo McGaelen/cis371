@@ -1,14 +1,14 @@
 <?php
 $db = new mysqli('localhost', 'mcinteeg','mcinteeg','mcinteeg');
-$query = 'SELECT * FROM friend';
-
 if ($db->connect_error) {
     die('Can’t connect to db' . $db->connect_error);
 } else {
     echo '<p>Connected successfully.</p>';
 }
 
-$result = $db->query($query);
+$searchTerm = $_GET['friendName'];
+
+$result = $db->query("SELECT * FROM friend WHERE name LIKE '%".$searchTerm."%'");
 if ($db->error) {
     die($db->error);
 }
