@@ -19,4 +19,5 @@ while ($row = fgetcsv($file)) {
     $counter++;
 }
 
+echo 'Records entered: ' . $counter;
 ?>
