@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Enter in a friend</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-
+    <form action="db-insert.php" method="POST">
+        Name: <input required type="text" name="friendName" pattern="([A-Z][a-z]*)+" />
+        Phone: <input required type="text" name="friendPhone" pattern="\d{10}|\d{7}"/>
+        Age: <input required type="number" name="friendAge" />
+        <input type="submit" value="Add Friend" />
+    </form>
 </body>
 </html>

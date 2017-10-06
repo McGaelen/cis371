@@ -1,5 +1,10 @@
 <?php
 $db = new mysqli('localhost', 'mcinteeg','mcinteeg','mcinteeg');
+if ($db->connect_error) {
+    die('Can’t connect to db' . $db->connect_error);
+} else {
+    echo '<p>Connected successfully.</p>';
+}
 $db->query('TRUNCATE friend');
 
 $csvFile = $_FILES['csvFile'];
