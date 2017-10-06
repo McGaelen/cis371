@@ -1,3 +1,7 @@
 input:invalid {
     background-color: #ff6d77;
 }
+
+input:valid {
+    background-color: #73ff67;
+}
