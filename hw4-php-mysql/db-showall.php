@@ -10,9 +10,9 @@ if ($db->connect_error) {
 
 $result = $db->query($query);
 echo '<p>Rows fetched:</p>';
-printf('%20s %12s %4d\n', 'Name', 'Phone', 'Age');
+printf('%s %s %s <br />', 'Name', 'Phone', 'Age');
 while ($row = $result->fetch_assoc()) {
-    printf('%20s %12s %4d\n', $row['name'], $row['phone'], $row['age']);
+    printf('%s %s %d <br />', $row['name'], $row['phone'], $row['age']);
 }
 
 ?>
