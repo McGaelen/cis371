@@ -1,5 +1,7 @@
 <?php
 $db = new mysqli('localhost', 'mcinteeg','mcinteeg','mcinteeg');
+$db->query('TRUNCATE friend');
+
 $csvFile = $_FILES['csvFile'];
 
 if ($csvFile['error'] !== 0) {
@@ -13,15 +15,14 @@ if (is_uploaded_file($csvFile['tmp_name'])) {
 }
 
 $file = fopen($uploadFolder, 'r');
-$query = 'INSERT INTO friend ( name, phone, age ) VALUES ( "$row[0]", "$row[2]", $row[3] )';
 $counter = 0;
-while ($row = fgetcsv($file)) {
-    $db->query($query);
+while ($row = fgetcsv($file, 2000, ",")) {
+    $db->query("INSERT INTO friend ( name, phone, age ) VALUES ( '".$row[0]."','".$row[1]."','".$row[2]."' )");
     if ($db->error) {
         die($db->error);
     }
     $counter++;
 }
-
+fclose($file);
 echo 'Records entered: ' . $counter;
 ?>
