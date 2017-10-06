@@ -16,6 +16,9 @@ $file = fopen($uploadFolder, 'r');
 $counter = 0;
 while ($row = fgetcsv($file)) {
     $db->query('INSERT INTO friend ( name, phone, age ) VALUES ( $row[0], $row[2], $row[3])');
+    if ($db->error) {
+        die($db->error);
+    }
     $counter++;
 }
 
