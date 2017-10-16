@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CIS 371 Firebase Homework</title>
+    <script src="https://www.gstatic.com/firebasejs/4.5.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        let config = {
+            apiKey: "AIzaSyCw0k0-T8arrp50tg7HAK5mrUIOoNC8Yxo",
+            authDomain: "cis371-firebase.firebaseapp.com",
+            databaseURL: "https://cis371-firebase.firebaseio.com",
+            projectId: "cis371-firebase",
+            storageBucket: "",
+            messagingSenderId: "1052168282948"
+        };
+        firebase.initializeApp(config);
+
+        db = firebase.database();
+        friendsRef = db.ref('friends/');
+
+        friendsRef.on("value", (snapshot) => {
+            let table = document.getElementById('data-table');
+
+            while (table.childElementCount > 1) {
+                table.removeChild(table.lastChild);
+            }
+
+            snapshot.val().forEach( (record) => {
+                let newRow = document.createElement('tr');
+                let newNameCol = document.createElement('td');
+                let newPhoneCol = document.createElement('td');
+                let newAgeCol = document.createElement('td');
+                let phoneStr = record.phone;
+
+                table.appendChild(newRow);
+
+                if (phoneStr.length === 10) {
+                    let areacode = phoneStr.substr(0, 3);
+                    let secondpart = phoneStr.substr(3, 3);
+                    let thirdpart = phoneStr.substr(6, 4);
+                    phoneStr = `(${areacode}) ${secondpart}-${thirdpart}`;
+                } else {
+                    let secondpart = phoneStr.substr(0, 3);
+                    let thirdpart = phoneStr.substr(3, 4);
+                    phoneStr = `${secondpart}-${thirdpart}`;
+                }
+
+                newNameCol.appendChild(document.createTextNode(record.name));
+                newPhoneCol.appendChild(document.createTextNode(phoneStr));
+                newAgeCol.appendChild(document.createTextNode(record.age));
+                newRow.appendChild(newNameCol);
+                newRow.appendChild(newPhoneCol);
+                newRow.appendChild(newAgeCol);
+            });
+        });
+    </script>
+    <style>
+        input[type=text]:invalid, input[type=number]:invalid {
+            background-color: #ff6d77;
+        }
+
+        input[type=text]:valid, input[type=number]:invalid {
+            background-color: #73ff67;
+        }
+    </style>
+</head>
+<body>
+    <div id="upload-json">
+        <input type="file" id="upload-json-files" value="Upload" />
+        <button id="begin-upload">Import</button>
+        <span>Records Added: <span id="num-records">0</span></span>
+        <script>
+            document.getElementById('begin-upload').onclick = function () {
+                let files = document.getElementById('upload-json-files').files;
+                let numRecordsElm = document.getElementById('num-records');
+                let reader = new FileReader();
+                let json;
+
+                reader.onload = function (e) {
+                    json = JSON.parse(e.target.result);
+                    console.log(json);
+                    friendsRef.set(json);
+                    numRecordsElm.replaceChild(document.createTextNode(json.length), numRecordsElm.firstChild);
+                };
+                reader.readAsText(files.item(0));
+            }
+        </script>
+    </div>
+
+    <div id="insert-friend">
+        <script>
+            function submitFriend(event) {
+                event.preventDefault();
+                let name = document.getElementById('name-input').value;
+                let phone = document.getElementById('phone-input').value;
+                let age = document.getElementById('age-input').value;
+
+                // firebase stuff to add a record without overriding...
+            }
+        </script>
+        <form id="insert-friend-form" onsubmit="submitFriend(event)">
+            Name: <input required id="name-input" type="text" name="friendName" pattern="([A-Z][a-z]*)+" />
+            Phone: <input required id="phone-input" type="text" name="friendPhone" pattern="\d{10}|\d{7}"/>
+            Age: <input required id="age-input" type="number" name="friendAge" />
+            <input type="submit" value="Add Friend" />
+        </form>
+    </div>
+
+    <div id="friends-table">
+        <table cellspacing="10" id="data-table">
+            <tr id="headings">
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Age</th>
+            </tr>
+        </table>
+    </div>
+
+
+    <div id="friend-search">
+
+    </div>
+
+</body>
+</html>
