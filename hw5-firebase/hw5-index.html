@@ -26,7 +26,7 @@
                 table.removeChild(table.lastChild);
             }
 
-            snapshot.val().forEach( (record) => {
+            Object.values(snapshot.val()).forEach( (record) => {
                 let newRow = document.createElement('tr');
                 let newNameCol = document.createElement('td');
                 let newPhoneCol = document.createElement('td');
@@ -56,22 +56,30 @@
         });
     </script>
     <style>
-        input[type=text]:invalid, input[type=number]:invalid {
+        form input[type=text]:invalid, input[type=number]:invalid {
             background-color: #ff6d77;
         }
 
-        input[type=text]:valid, input[type=number]:invalid {
+        form input[type=text]:valid, input[type=number]:invalid {
             background-color: #73ff67;
+        }
+
+        .search-box {
+            margin-right: 10px;
+        }
+
+        .margin-top {
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div id="upload-json">
+    <div id="upload-json" class="margin-top">
         <input type="file" id="upload-json-files" value="Upload" />
-        <button id="begin-upload">Import</button>
+        <button id="begin-upload" onclick="upload()">Import</button>
         <span>Records Added: <span id="num-records">0</span></span>
         <script>
-            document.getElementById('begin-upload').onclick = function () {
+            function upload() {
                 let files = document.getElementById('upload-json-files').files;
                 let numRecordsElm = document.getElementById('num-records');
                 let reader = new FileReader();
@@ -79,8 +87,10 @@
 
                 reader.onload = function (e) {
                     json = JSON.parse(e.target.result);
-                    console.log(json);
-                    friendsRef.set(json);
+                    friendsRef.remove();
+                    json.forEach((record) => {
+                        friendsRef.push().set(record);
+                    });
                     numRecordsElm.replaceChild(document.createTextNode(json.length), numRecordsElm.firstChild);
                 };
                 reader.readAsText(files.item(0));
@@ -88,15 +98,16 @@
         </script>
     </div>
 
-    <div id="insert-friend">
+    <div id="insert-friend" class="margin-top">
         <script>
             function submitFriend(event) {
                 event.preventDefault();
+
                 let name = document.getElementById('name-input').value;
                 let phone = document.getElementById('phone-input').value;
                 let age = document.getElementById('age-input').value;
 
-                // firebase stuff to add a record without overriding...
+                friendsRef.push().set({name: name, phone: phone, age: age});
             }
         </script>
         <form id="insert-friend-form" onsubmit="submitFriend(event)">
@@ -107,7 +118,19 @@
         </form>
     </div>
 
-    <div id="friends-table">
+    <div id="friend-search" class="margin-top">
+        Search for a friend: <input type="text" class="search-box" id="search-term"/><button onclick="searchFriend()">Search</button>
+        <script>
+            function searchFriend() {
+                let searchTerm = document.getElementById('search-term').value;
+                friendsRef.orderByKey().equalTo(searchTerm).on('value', (snapshot) => {
+                    console.log(snapshot.val());
+                });
+            }
+        </script>
+    </div>
+
+    <div id="friends-table" class="margin-top">
         <table cellspacing="10" id="data-table">
             <tr id="headings">
                 <th>Name</th>
@@ -115,11 +138,6 @@
                 <th>Age</th>
             </tr>
         </table>
-    </div>
-
-
-    <div id="friend-search">
-
     </div>
 
 </body>
