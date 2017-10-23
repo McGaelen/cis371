@@ -19,12 +19,14 @@
         db = firebase.database();
         friendsRef = db.ref('friends/');
 
-        friendsRef.on("value", (snapshot) => {
+        function display(snapshot) {
             let table = document.getElementById('data-table');
 
             while (table.childElementCount > 1) {
                 table.removeChild(table.lastChild);
             }
+
+            if (!snapshot.val()) { return; }
 
             Object.values(snapshot.val()).forEach( (record) => {
                 let newRow = document.createElement('tr');
@@ -53,6 +55,10 @@
                 newRow.appendChild(newPhoneCol);
                 newRow.appendChild(newAgeCol);
             });
+        }
+
+        friendsRef.on("value", (snapshot) => {
+            display(snapshot);
         });
     </script>
     <style>
@@ -119,15 +125,19 @@
     </div>
 
     <div id="friend-search" class="margin-top">
-        Search for a friend: <input type="text" class="search-box" id="search-term"/><button onclick="searchFriend()">Search</button>
         <script>
             function searchFriend() {
                 let searchTerm = document.getElementById('search-term').value;
-                friendsRef.orderByKey().equalTo(searchTerm).on('value', (snapshot) => {
-                    console.log(snapshot.val());
+                console.log(searchTerm);
+                friendsRef.orderByChild('name')
+                    .startAt(searchTerm)
+                    .endAt(searchTerm+"\uf8ff")
+                    .on('value', (snapshot) => {
+                    display(snapshot);
                 });
             }
         </script>
+        Search for a friend: <input type="text" class="search-box" id="search-term"/><button onclick="searchFriend()">Search</button>
     </div>
 
     <div id="friends-table" class="margin-top">
