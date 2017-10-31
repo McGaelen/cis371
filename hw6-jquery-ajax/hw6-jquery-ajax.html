@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Link to article on google calendar's api: -->
+    <!-- https://www.programmableweb.com/api/google-calendar -->
+    <!-- You can add any event to this calendar. I don't use it for anything. -->
+    <meta charset="UTF-8">
+    <title>CIS 371 jQuery and AJAX HW</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.js"
+            integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+            crossorigin="anonymous">
+    </script>
+    <script src="hw6-utils.js"></script>
+    <link rel="stylesheet" href="hw6.css" />
+</head>
+<body>
+    <h1>Google Calendar API</h1>
+    <table cellspacing="12" id="calendar-table">
+        <tr>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Event</th>
+            <th>Organizer</th>
+        </tr>
+    </table>
+    <script>
+        $.getJSON(`${prefix}/calendars/${id}/events?key=${apiKey}`, (response) => {
+            renderEvents(response.items);
+        });
+    </script>
+</body>
+</html>
