@@ -1,3 +1,37 @@
 #calendar-table {
+    border: 2px solid #a5a5a5;
+    background-color: #ededed;
+}
 
+#calendar-table tr:nth-child(odd) :not(th) {
+    background-color: #cacaca;
+}
+
+td, #event-input-row {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+th {
+    padding-top: 10px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border: 1px #a5a5a5;
+    border-bottom-style: solid;
+}
+
+td input, button {
+    width: 100%;
+}
+
+td input {
+    font-size: 14px;
+}
+
+.event-data {
+    border-right-style: solid;
+    border: 1px #a5a5a5;
 }

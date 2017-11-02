@@ -3,30 +3,96 @@
 <head>
     <!-- Link to article on google calendar's api: -->
     <!-- https://www.programmableweb.com/api/google-calendar -->
-    <!-- You can add any event to this calendar. I don't use it for anything. -->
+    <!-- For testing, you can add any event to this calendar. I don't use it for anything. -->
     <meta charset="UTF-8">
-    <title>CIS 371 jQuery and AJAX HW</title>
+    <title>CIS 371 jQuery and AJAX HW6</title>
+    <link rel="stylesheet" href="hw6.css" />
     <script src="https://code.jquery.com/jquery-3.2.1.js"
             integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
             crossorigin="anonymous">
     </script>
-    <script src="hw6-utils.js"></script>
-    <link rel="stylesheet" href="hw6.css" />
+    <script>
+        const prefix = 'https://www.googleapis.com/calendar/v3';
+        const apiKey = 'AIzaSyB4s-Dl-HjQdcoWJ0uD_wyb9SxORCguDN4';
+        const id = 'mcinteeg@mail.gvsu.edu';
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeOptions = { hour12: true };
+
+        function getEvents() {
+            $.getJSON(`${prefix}/calendars/${id}/events?key=${apiKey}`, (response) => {
+                let eventsList = response.items;
+                let table = $('#calendar-table');
+
+                $.each(eventsList, (index, event) => {
+                    let tr = $('<tr>').addClass('event-data');
+                    let start = new Date(event.start.dateTime);
+                    let end = new Date(event.end.dateTime);
+
+                    tr.append($('<td>').append(`${start.toLocaleDateString(dateOptions)} at ${start.toLocaleTimeString(timeOptions)}`));
+                    tr.append($('<td>').append(`${end.toLocaleDateString(dateOptions)} at ${end.toLocaleTimeString(timeOptions)}`));
+                    tr.append($('<td>').append(event.summary));
+                    tr.append($('<td>').append(event.organizer.email));
+                    table.append(tr);
+                });
+            });
+        }
+
+        function addEvent() {
+            let newStartTime = new Date($('#start-time').val());
+            let newEndTime = new Date($('#end-time').val());
+            let newEventName = $('#event-name').val();
+
+            if (!newStartTime || !newEndTime || !newEventName) { return; }
+
+            console.log(newStartTime.toISOString());
+            console.log(newEndTime.toISOString());
+
+            // Using the core $.ajax() method
+            $.ajax({
+                url: `${prefix}/calendars/${id}/events?key=${apiKey}`,
+                data: {
+                    "summary": newEventName,
+                    "start": {
+                        "dateTime": newStartTime.toISOString(),
+                        "timeZone": "America/Detroit"
+                    },
+                    "end": {
+                        "dateTime": newEndTime.toISOString(),
+                        "timeZone": "America/Detroit"
+                    }
+                },
+                type: "POST"
+            })
+            .done( () => {
+                console.log('event added.');
+                getEvents();
+            })
+            .fail( (xhr, status, errorThrown) => {
+                alert(`Error: ${errorThrown}`);
+                console.log(`Error: ${errorThrown}`);
+                console.log(`Status: ${status}`);
+            });
+        }
+    </script>
 </head>
 <body>
-    <h1>Google Calendar API</h1>
-    <table cellspacing="12" id="calendar-table">
+    <h1>CIS 371 HW6 - Google Calendar API</h1>
+    <table cellspacing="0" id="calendar-table">
         <tr>
             <th>Start Time</th>
             <th>End Time</th>
             <th>Event</th>
             <th>Organizer</th>
         </tr>
+        <tr id="event-input-row">
+            <td><input id="start-time" type="datetime-local" placeholder="Start Time"/></td>
+            <td><input id="end-time" type="datetime-local" placeholder="End Time"/></td>
+            <td><input id="event-name" type="text" placeholder="Event Name"/></td>
+            <td><button onclick="addEvent()">Add Event</button></td>
+        </tr>
     </table>
     <script>
-        $.getJSON(`${prefix}/calendars/${id}/events?key=${apiKey}`, (response) => {
-            renderEvents(response.items);
-        });
+        getEvents()
     </script>
 </body>
 </html>
