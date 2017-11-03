@@ -47,7 +47,6 @@
             console.log(newStartTime.toISOString());
             console.log(newEndTime.toISOString());
 
-            // Using the core $.ajax() method
             $.ajax({
                 url: `${prefix}/calendars/${id}/events?key=${apiKey}`,
                 data: {
@@ -77,6 +76,7 @@
 </head>
 <body>
     <h1>CIS 371 HW6 - Google Calendar API</h1>
+    <button id="show-hide" onclick="getEvents()">Show Events</button>
     <table cellspacing="0" id="calendar-table">
         <tr>
             <th>Start Time</th>
@@ -88,11 +88,11 @@
             <td><input id="start-time" type="datetime-local" placeholder="Start Time"/></td>
             <td><input id="end-time" type="datetime-local" placeholder="End Time"/></td>
             <td><input id="event-name" type="text" placeholder="Event Name"/></td>
-            <td><button onclick="addEvent()">Add Event</button></td>
+            <td><button id="add-event" onclick="addEvent()">Add Event</button></td>
         </tr>
     </table>
     <script>
-        getEvents()
+        $('#calendar-table').hide();
     </script>
 </body>
 </html>

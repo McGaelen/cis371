@@ -23,7 +23,7 @@ th {
     border-bottom-style: solid;
 }
 
-td input, button {
+td input, #add-event {
     width: 100%;
 }
 
@@ -34,4 +34,8 @@ td input {
 .event-data {
     border-right-style: solid;
     border: 1px #a5a5a5;
+}
+
+#show-hide {
+    margin-bottom: 10px;
 }
