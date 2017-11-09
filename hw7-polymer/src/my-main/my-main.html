@@ -1,32 +1,148 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-database-script.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 
 <dom-module id="my-main">
-  <template>
-    <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <h2>Hello [[prop1]]!</h2>
-  </template>
+    <style include="iron-flex iron-flex-alignment"></style>
 
-  <script>
-    /**
-     * @customElement
-     * @polymer
-     */
-    class MyMain extends Polymer.Element {
-      static get is() { return 'my-main'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'my-main'
-          }
-        };
-      }
-    }
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
 
-    window.customElements.define(MyMain.is, MyMain);
-  </script>
+            #list {
+                width: 60vw;
+                height: calc(100vh - 150px);
+                border: 2px solid #939696;
+                border-radius: 5px;
+                padding-right: 5px;
+            }
+
+            #addFriendButton {
+                margin: 10px;
+                background-color: #0074ff;
+                color: white;
+            }
+
+            .delete-button {
+                background-color: #ff0714;
+                color: white;
+            }
+
+            paper-card  {
+                width: 100%;
+                background-color: #d2d4d0;
+            }
+
+            .card-container {
+                padding: 10px;
+            }
+
+            .container-horizontal {
+                @apply(--layout-horizontal);
+                margin-left: 16px;
+                margin-bottom: 10px;
+            }
+
+            .container-vertical {
+                @apply(--layout-vertical);
+                margin-right: 10px;
+            }
+        </style>
+        <h2>Hello [[prop1]]!</h2>
+        <firebase-app id="myFireApp"
+                      api-key="AIzaSyCw0k0-T8arrp50tg7HAK5mrUIOoNC8Yxo"
+                      auth-domain="cis371-firebase.firebaseapp.com"
+                      database-url="https://cis371-firebase.firebaseio.com"
+                      storage-bucket="cis371-firebase.appspot.com"
+                      messaging-sender-id="1052168282948">
+        </firebase-app>
+        <firebase-query path="/friends" data="{{qryData}}"></firebase-query>
+
+        <paper-button id="addFriendButton" raised on-click="diaOpen">Add Friend</paper-button>
+
+        <iron-list id="list" items="[[qryData]]" as="qry">
+        <template>
+            <div class="card-container">
+                <paper-card heading="[[qry.name]]" elevation="3">
+                    <div class="container-horizontal">
+                        <div class="container-vertical">
+                            <div class="card-content">Age: </div>
+                            <div class="card-content">Phone: </div>
+                        </div>
+                        <div class="container-vertical">
+                            <div class="card-content">[[qry.age]]</div>
+                            <div class="card-content">[[qry.phone]]</div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <paper-button class="delete-button" raised on-click="deleteEntry">
+                            <iron-icon icon="icons:clear"></iron-icon>
+                        </paper-button>
+                    </div>
+                </paper-card>
+            </div>
+        </template>
+        </iron-list>
+
+        <paper-dialog id="newFriend"
+                      modal
+                      on-iron-overlay-closed="diaClosed">
+            <paper-input id="nameInput" label="Name"></paper-input>
+            <paper-input id="ageInput" label="Age"></paper-input>
+            <paper-input id="phoneInput" label="Phone"></paper-input>
+            <div class="buttons">
+                <paper-button dialog-dismiss>Cancel</paper-button>
+                <paper-button dialog-confirm>Add</paper-button>
+            </div>
+        </paper-dialog>
+
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class MyMain extends Polymer.Element {
+            static get is() { return 'my-main'; }
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String,
+                        value: 'my-main'
+                    }
+                };
+            }
+            diaOpen() {
+                this.$.newFriend.open();
+            }
+            diaClosed() {
+                if (this.$.newFriend.closingReason.confirmed) {
+                    const dbRef = this.$.myFireApp.app.database();
+                    dbRef.ref('/friends').push().set({
+                        name: this.$.nameInput.value,
+                        age: this.$.ageInput.value,
+                        phone: this.$.phoneInput.value
+                    });
+                }
+            }
+            deleteEntry(e) {
+                const key = e.model.qry.$key;
+                const dbRef = this.$.myFireApp.app.database();
+                dbRef.ref('/friends').child(key).remove();
+            }
+        }
+
+        window.customElements.define(MyMain.is, MyMain);
+    </script>
 </dom-module>
