@@ -1,0 +1,22 @@
+<link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<script src="../node_modules/redux/dist/redux.js"></script>
+
+<script>
+    const initialState = {
+        selectedFriend: null,
+    };
+
+    function reducer(state = initialState, action)  {
+        switch (action.type) {
+            case 'SELECT_FRIEND':
+                return { ...state, selectedFriend: action.payload };
+            case 'DESELECT_FRIEND':
+                return { ...state, selectedFriend: null };
+            default:
+                return state;
+        }
+    }
+
+    const store = Redux.createStore(reducer);
+    ReduxMixin = PolymerRedux(store);
+</script>
