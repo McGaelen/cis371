@@ -9,6 +9,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-collapse/iron-collapse.html">
 <link rel="import" href="redux-mixin.html">
 
 <dom-module id="friend-detail">
@@ -52,8 +53,8 @@
             }
         </style>
 
-
-        <paper-card hidden$="[[hideCard]]" heading="[[selectedFriend.name]]" elevation="3">
+        <iron-collapse id="collapse" opened="[[showCard]]">
+        <paper-card heading="[[selectedFriend.name]]" elevation="3">
             <div class="container-horizontal">
                 <div class="container-vertical">
                     <div class="card-content">Age: </div>
@@ -71,6 +72,7 @@
                 </paper-button>
             </div>
         </paper-card>
+        </iron-collapse>
 
     </template>
 
@@ -87,11 +89,19 @@
                         type: Object,
                         statePath: 'selectedFriend'
                     },
-                    hideCard: {
+                    showCard: {
                         type: Boolean,
-                        value: true
+                        value: false
                     }
                 };
+            }
+
+            static get actions() {
+                return {
+                    deselectFriend() {
+                        return { type: 'DESELECT_FRIEND' }
+                    }
+                }
             }
 
             ready() {
@@ -100,17 +110,15 @@
                 store.subscribe( () => {
                     let state = store.getState();
                     if (state.selectedFriend) {
-                        this.hideCard = false;
+                        this.showCard = true;
                     } else {
-                        this.hideCard = true;
+                        this.showCard = false;
                     }
                 });
             }
 
             _deselectFriend() {
-                this.dispatch({
-                    type: 'DESELECT_FRIEND'
-                });
+                this.dispatch('deselectFriend');
             }
         }
 

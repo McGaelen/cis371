@@ -23,6 +23,7 @@
             .card-container {
                 border-bottom: 1px solid;
                 user-select: none;
+                padding: 10px;
             }
 
             .selected {
@@ -47,31 +48,6 @@
                 margin: 10px;
                 background-color: #0074ff;
                 color: white;
-            }
-
-            .delete-button {
-                background-color: #ff0714;
-                color: white;
-            }
-
-            paper-card  {
-                width: 100%;
-                background-color: #d2d4d0;
-            }
-
-            .card-container {
-                padding: 10px;
-            }
-
-            .container-horizontal {
-                @apply(--layout-horizontal);
-                margin-left: 16px;
-                margin-bottom: 10px;
-            }
-
-            .container-vertical {
-                @apply(--layout-vertical);
-                margin-right: 10px;
             }
         </style>
         <h2>Friends List</h2>
@@ -124,16 +100,22 @@
                 };
             }
 
+            static get actions() {
+                return {
+                    selectFriend(friend) {
+                        return { type: 'SELECT_FRIEND', payload: friend }
+                    },
+                    deselectFriend() {
+                        return { type: 'DESELECT_FRIEND' }
+                    }
+                }
+            }
+
             _setSelectedFriend() {
                 if (this.selectedFriend === null) {
-                    this.dispatch({
-                        type: 'DESELECT_FRIEND'
-                    })
+                    this.dispatch('deselectFriend');
                 } else {
-                    this.dispatch({
-                        type: 'SELECT_FRIEND',
-                        payload: this.selectedFriend
-                    })
+                    this.dispatch({type: 'SELECT_FRIEND', payload: this.selectedFriend });
                 }
             }
 
@@ -157,11 +139,6 @@
                     });
                 }
             }
-//            deleteEntry(e) {
-//                const key = e.model.qry.$key;
-//                const dbRef = this.$.myFireApp.app.database();
-//                dbRef.ref('/friends').child(key).remove();
-//            }
         }
 
         window.customElements.define(FriendList.is, FriendList);
