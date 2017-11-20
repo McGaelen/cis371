@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>hw7-polymer</title>
-    <meta name="description" content="hw7">
+    <title>hw8-redux</title>
+    <meta name="description" content="hw8">
 
     <!-- See https://goo.gl/OOhYW5 -->
     <link rel="manifest" href="/manifest.json">
@@ -13,8 +13,14 @@
     <script src="bower_components/webcomponentsjs/webcomponents-loader.js"></script>
 
     <link rel="import" href="src/my-main.html">
+    <link rel="import" href="src/friend-detail.html">
+      <link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
   </head>
+
+  <style is="custom-style" include="iron-flex iron-positioning iron-flex-alignment"></style>
+
   <body>
     <friend-list></friend-list>
+    <friend-detail></friend-detail>
   </body>
 </html>
